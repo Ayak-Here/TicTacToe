@@ -1,6 +1,12 @@
 # Three in a Row
 
-A browser game with guest play, three game variations, verified accounts, and saved match history. The project uses FastAPI and PostgreSQL; the frontend is served from `web/`.
+A browser game with guest play, three game variations, accounts, and saved match history. The project uses FastAPI and PostgreSQL; the frontend is served from `web/`.
+
+## Accounts
+
+Registration asks for an email address, password, and password confirmation. The app checks that the address has a valid email-like format, hashes passwords with scrypt, and signs the user in after registration. It does not confirm that the mailbox exists or belongs to the user. Existing addresses are prompted to sign in.
+
+Email delivery and password-reset codes are not configured. Users who forget their password cannot currently recover the account, so keep the password safe. Password recovery can be added later with a verified email provider or another recovery method.
 
 ## Run locally
 
@@ -19,21 +25,14 @@ A browser game with guest play, three game variations, verified accounts, and sa
 
 Open [http://localhost:8000](http://localhost:8000). PostgreSQL creates its tables automatically when the app starts.
 
-For local email testing, leave SMTP blank; verification and password reset codes print in the terminal. To send real emails, fill the SMTP settings in `.env`. Never commit `.env`; `.gitignore` excludes it. `.env.example` is the safe template.
-
 ## Deploy to Vercel
 
-Vercel detects the FastAPI app in `app.py` and installs `requirements.txt`. The site and API deploy together. Connect Neon through the Vercel Marketplace integration and set the following in **Project → Settings → Environment Variables**:
+Vercel detects the FastAPI app in `app.py` and installs `requirements.txt`. The site and API deploy together. Connect Neon through the Vercel Marketplace integration or set these variables in **Project → Settings → Environment Variables**:
 
 ```text
 DATABASE_URL=<Neon pooled connection string>
 APP_ENV=production
 APP_SECRET=<unique random secret, at least 32 characters>
-SMTP_HOST=smtp.resend.com
-SMTP_PORT=465
-SMTP_FROM=Three in a Row <no-reply@your-verified-domain.com>
-SMTP_USER=resend
-SMTP_PASSWORD=<Resend API key>
 ```
 
-Verify your sending domain with Resend before accepting registrations. Do not upload `.env` or paste secrets into GitHub. Local SQLite and the old Tkinter app are not part of this project.
+Keep `.env` private and out of GitHub. `APP_SECRET` must be a strong, unique value. Local SQLite and the old Tkinter app are not part of this project.

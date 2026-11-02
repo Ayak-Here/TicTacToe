@@ -26,7 +26,7 @@ function showScreen(screen, authPanel = state.authPanel, updateUrl = true) {
 
 function showError(message) {
   const element = state.screen === 'auth' ? document.querySelector('#form-error') : document.querySelector('#toast');
-  element.textContent = message;
+  element.replaceChildren(document.createTextNode(message));
   if (element.id === 'toast') {
     element.classList.add('visible');
     clearTimeout(state.toastTimer);
@@ -240,48 +240,34 @@ async function recordResult() {
   }
 }
 
-function setEmail(form, email) {
-  form.elements.email.value = email;
-}
-
 function setupForm(id, handler) {
   document.querySelector(id).addEventListener('submit', async event => {
     event.preventDefault();
     const form = event.currentTarget;
     const submit = form.querySelector('[type="submit"]');
     submit.disabled = true;
-    document.querySelector('#form-error').textContent = '';
+    document.querySelector('#form-error').replaceChildren();
     try { await handler(formData(form), form); }
     catch (error) {
-      if (error.data?.verificationRequired) {
-        showVerification(error.data.email || form.elements.email.value);
-      } else showError(error.message);
+      showError(error.message);
+      if (error.data?.accountExists) {
+        const signIn = document.createElement('button');
+        signIn.type = 'button';
+        signIn.className = 'inline-link';
+        signIn.textContent = 'Sign in instead';
+        signIn.addEventListener('click', () => {
+          document.querySelector('#login-form').elements.email.value = error.data.email || form.elements.email.value;
+          showScreen('auth', 'login');
+        });
+        document.querySelector('#form-error').append(' ', signIn);
+      }
     } finally { submit.disabled = false; }
   });
 }
 
-function showVerification(email) {
-  const form = document.querySelector('#verify-form');
-  setEmail(form, email);
-  document.querySelector('#verify-email-label').textContent = email;
-  showScreen('auth', 'verify');
-}
-
 setupForm('#register-form', async data => {
-  await api('/api/auth/register', { method: 'POST', body: JSON.stringify(data) });
-  showVerification(data.email.trim().toLowerCase());
-});
-
-setupForm('#verify-form', async data => {
-  const result = await api('/api/auth/verify', { method: 'POST', body: JSON.stringify(data) });
-  const form = document.querySelector('#register-password-form');
-  form.elements.setupToken.value = result.setupToken;
-  showScreen('auth', 'register-password');
-});
-
-setupForm('#register-password-form', async data => {
   if (data.password !== data.confirmPassword) throw new Error('The passwords do not match.');
-  await api('/api/auth/register/complete', { method: 'POST', body: JSON.stringify(data) });
+  await api('/api/auth/register', { method: 'POST', body: JSON.stringify(data) });
   await refreshAccount();
   showScreen('game');
   await startGame();
@@ -292,44 +278,6 @@ setupForm('#login-form', async data => {
   await refreshAccount();
   showScreen('game');
   await startGame();
-});
-
-setupForm('#forgot-form', async data => {
-  await api('/api/auth/forgot', { method: 'POST', body: JSON.stringify(data) });
-  const email = data.email.trim().toLowerCase();
-  setEmail(document.querySelector('#forgot-verify-form'), email);
-  document.querySelector('#reset-email-label').textContent = email;
-  showScreen('auth', 'forgot-verify');
-  document.querySelector('#form-error').textContent = 'If a verified account uses that email, a reset code was sent.';
-});
-
-setupForm('#forgot-verify-form', async data => {
-  const result = await api('/api/auth/reset/verify', { method: 'POST', body: JSON.stringify(data) });
-  document.querySelector('#reset-form').elements.resetToken.value = result.resetToken;
-  showScreen('auth', 'reset');
-});
-
-setupForm('#reset-form', async data => {
-  if (data.password !== data.confirmPassword) throw new Error('The passwords do not match.');
-  await api('/api/auth/reset', { method: 'POST', body: JSON.stringify(data) });
-  showScreen('auth', 'login');
-  document.querySelector('#form-error').textContent = 'Password updated. You can sign in now.';
-});
-
-document.querySelector('#resend-code').addEventListener('click', async () => {
-  const email = document.querySelector('#verify-form').elements.email.value;
-  try {
-    await api('/api/auth/resend', { method: 'POST', body: JSON.stringify({ email }) });
-    document.querySelector('#form-error').textContent = 'If that account is awaiting verification, a new code was sent.';
-  } catch (error) { showError(error.message); }
-});
-
-document.querySelector('#resend-reset-code').addEventListener('click', async () => {
-  const email = document.querySelector('#forgot-verify-form').elements.email.value;
-  try {
-    await api('/api/auth/forgot', { method: 'POST', body: JSON.stringify({ email }) });
-    document.querySelector('#form-error').textContent = 'If a verified account uses that email, a new code was sent.';
-  } catch (error) { showError(error.message); }
 });
 
 document.querySelectorAll('[data-auth-link]').forEach(button => button.addEventListener('click', () => showScreen('auth', button.dataset.authLink)));
@@ -371,7 +319,7 @@ document.addEventListener('keydown', event => {
 });
 
 const initialRoute = location.hash.slice(1);
-if (['login', 'register', 'forgot'].includes(initialRoute)) showScreen('auth', initialRoute, false);
+if (['login', 'register'].includes(initialRoute)) showScreen('auth', initialRoute, false);
 else if (initialRoute === 'game') startGame();
 else showScreen('home', 'login', false);
 refreshAccount().catch(() => {});

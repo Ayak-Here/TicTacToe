@@ -1,4 +1,4 @@
-"""Shared game, password, and email helpers for the Vercel FastAPI app."""
+"""Shared game and password helpers for the Vercel FastAPI app."""
 
 from __future__ import annotations
 
@@ -7,9 +7,6 @@ import hmac
 import os
 import random
 import secrets
-import smtplib
-import ssl
-from email.message import EmailMessage
 from pathlib import Path
 
 ROOT = Path(__file__).parent
@@ -52,41 +49,6 @@ def verify_password(password: str, stored: str) -> bool:
         return hmac.compare_digest(digest.hex(), digest_hex)
     except (ValueError, TypeError):
         return False
-
-
-def code_digest(email: str, purpose: str, code: str) -> str:
-    return hmac.new(APP_SECRET, f"{email}:{purpose}:{code}".encode(), hashlib.sha256).hexdigest()
-
-
-def send_code(email: str, purpose: str, code: str) -> None:
-    host = os.environ.get("SMTP_HOST")
-    sender = os.environ.get("SMTP_FROM")
-    if not host or not sender:
-        if os.environ.get("APP_ENV") == "production":
-            raise RuntimeError("Email delivery is not configured")
-        print(f"[development only] {purpose} code for {email}: {code}")
-        return
-
-    message = EmailMessage()
-    message["Subject"] = "Your Three in a Row verification code"
-    message["From"] = sender
-    message["To"] = email
-    message.set_content(f"Your code is {code}. It expires in 10 minutes.\n\nIf you did not request this code, you can ignore this email.")
-    port = int(os.environ.get("SMTP_PORT", "587"))
-    username = os.environ.get("SMTP_USER", "")
-    password = os.environ.get("SMTP_PASSWORD", "")
-    context = ssl.create_default_context()
-    if port == 465:
-        with smtplib.SMTP_SSL(host, port, context=context, timeout=15) as smtp:
-            if username:
-                smtp.login(username, password)
-            smtp.send_message(message)
-    else:
-        with smtplib.SMTP(host, port, timeout=15) as smtp:
-            smtp.starttls(context=context)
-            if username:
-                smtp.login(username, password)
-            smtp.send_message(message)
 
 
 def winner_for(board: list[str | None], size: int, target: int, misere: bool = False) -> tuple[str | None, list[int]]:

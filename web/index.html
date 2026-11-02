@@ -43,35 +43,13 @@
         <div class="auth-panel" data-auth-panel="login">
           <p class="section-kicker">WELCOME BACK</p><h2>Sign in</h2><p class="form-intro">Your record is right where you left it.</p>
           <form id="login-form"><label>Email address<input name="email" type="email" autocomplete="email" required maxlength="254" placeholder="you@example.com"></label><label>Password<input name="password" type="password" autocomplete="current-password" required maxlength="128" placeholder="Your password"></label><button class="primary-button full-button" type="submit">SIGN IN <span>↗</span></button></form>
-          <button class="inline-link forgot-link" data-auth-link="forgot">Forgot password?</button><p class="switch-copy">New here? <button class="inline-link" data-auth-link="register">Create an account</button></p>
+          <p class="field-note recovery-note">Password recovery isn’t available yet. Keep your password somewhere safe.</p><p class="switch-copy">New here? <button class="inline-link" data-auth-link="register">Create an account</button></p>
         </div>
         <div class="auth-panel hidden" data-auth-panel="register">
-          <p class="section-kicker">STEP 1 · VERIFY EMAIL</p><h2>Create account</h2><p class="form-intro">Enter your email and we’ll send you a six-digit verification code.</p>
-          <form id="register-form"><label>Email address<input name="email" type="email" autocomplete="email" required maxlength="254" placeholder="you@example.com"></label><button class="primary-button full-button" type="submit">SEND VERIFICATION CODE <span>↗</span></button></form>
+          <p class="section-kicker">JOIN THE TABLE</p><h2>Create account</h2><p class="form-intro">Use an email address and password to save your game record.</p>
+          <form id="register-form"><label>Email address<input name="email" type="email" autocomplete="email" required maxlength="254" placeholder="you@example.com"></label><label>Create password<input name="password" type="password" autocomplete="new-password" required minlength="10" maxlength="128" placeholder="At least 10 characters"></label><label>Re-enter password<input name="confirmPassword" type="password" autocomplete="new-password" required minlength="10" maxlength="128" placeholder="Enter it again"></label><button class="primary-button full-button" type="submit">CREATE ACCOUNT <span>↗</span></button></form>
+          <p class="field-note">Email format is checked; mailbox ownership isn’t verified.</p>
           <p class="switch-copy">Already have an account? <button class="inline-link" data-auth-link="login">Sign in</button></p>
-        </div>
-        <div class="auth-panel hidden" data-auth-panel="verify">
-          <p class="section-kicker">STEP 2 · EMAIL CODE</p><h2>Enter your code</h2><p class="form-intro">We sent a six-digit code to <strong id="verify-email-label"></strong>. It expires in ten minutes.</p>
-          <form id="verify-form"><input name="email" type="hidden"><label>Verification code<input class="code-input" name="code" type="text" inputmode="numeric" pattern="[0-9]{6}" autocomplete="one-time-code" required maxlength="6" placeholder="000000"></label><button class="primary-button full-button" type="submit">VERIFY EMAIL <span>↗</span></button></form>
-          <button class="inline-link" id="resend-code">Send a new code</button>
-        </div>
-        <div class="auth-panel hidden" data-auth-panel="register-password">
-          <p class="section-kicker">STEP 3 · CREATE PASSWORD</p><h2>Create a password</h2><p class="form-intro">Choose a password for your new account, then enter it again to confirm.</p>
-          <form id="register-password-form"><input name="setupToken" type="hidden"><label>Create password<input name="password" type="password" autocomplete="new-password" required minlength="10" maxlength="128" placeholder="At least 10 characters"></label><label>Re-enter password<input name="confirmPassword" type="password" autocomplete="new-password" required minlength="10" maxlength="128" placeholder="Enter it again"></label><button class="primary-button full-button" type="submit">CREATE ACCOUNT <span>↗</span></button></form>
-        </div>
-        <div class="auth-panel hidden" data-auth-panel="forgot">
-          <p class="section-kicker">STEP 1 · REQUEST A CODE</p><h2>Forgot password?</h2><p class="form-intro">Enter your account email and we’ll send a password reset code.</p>
-          <form id="forgot-form"><label>Email address<input name="email" type="email" autocomplete="email" required maxlength="254" placeholder="you@example.com"></label><button class="primary-button full-button" type="submit">SEND RESET CODE <span>↗</span></button></form>
-          <p class="switch-copy"><button class="inline-link" data-auth-link="login">Back to sign in</button></p>
-        </div>
-        <div class="auth-panel hidden" data-auth-panel="forgot-verify">
-          <p class="section-kicker">STEP 2 · VERIFY CODE</p><h2>Verify your code</h2><p class="form-intro">Enter the six-digit reset code sent to <strong id="reset-email-label"></strong>.</p>
-          <form id="forgot-verify-form"><input name="email" type="hidden"><label>Reset code<input class="code-input" name="code" type="text" inputmode="numeric" pattern="[0-9]{6}" autocomplete="one-time-code" required maxlength="6" placeholder="000000"></label><button class="primary-button full-button" type="submit">VERIFY CODE <span>↗</span></button></form>
-          <button class="inline-link" id="resend-reset-code">Send a new code</button>
-        </div>
-        <div class="auth-panel hidden" data-auth-panel="reset">
-          <p class="section-kicker">STEP 3 · NEW PASSWORD</p><h2>Choose a new password</h2><p class="form-intro">Create your new password, then enter it again to confirm.</p>
-          <form id="reset-form"><input name="resetToken" type="hidden"><label>New password<input name="password" type="password" autocomplete="new-password" required minlength="10" maxlength="128" placeholder="At least 10 characters"></label><label>Re-enter password<input name="confirmPassword" type="password" autocomplete="new-password" required minlength="10" maxlength="128" placeholder="Enter it again"></label><button class="primary-button full-button" type="submit">RESET PASSWORD <span>↗</span></button></form>
         </div>
         <p class="form-error" id="form-error" role="status"></p>
       </div>
