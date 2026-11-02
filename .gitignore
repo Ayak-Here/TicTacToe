@@ -1,0 +1,10 @@
+# Local secrets and environment settings
+.env
+.env.*
+!.env.example
+
+# Local database and Python cache
+tictactoe.sqlite3
+tictactoe.sqlite3-*
+__pycache__/
+*.py[cod]

@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#171916">
+  <meta name="description" content="Thoughtful tic tac toe, in a few good variations.">
+  <title>Three in a Row — A little game of strategy</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="page">
+    <header class="masthead">
+      <a class="wordmark" href="#home" aria-label="Three in a Row home">THREE IN A ROW<span>®</span></a>
+      <nav class="main-nav" id="main-nav">
+        <button class="text-button" data-screen-link="game">HOW TO PLAY</button>
+        <button class="text-button" data-auth-link="login">SIGN IN</button>
+        <button class="small-cta" data-auth-link="register">CREATE ACCOUNT</button>
+      </nav>
+      <div class="account-nav hidden" id="account-nav"><span id="nav-email"></span><button class="text-button" id="logout-button">SIGN OUT</button></div>
+    </header>
+
+    <section class="screen landing" id="home-screen" data-screen="home">
+      <div class="hero-copy">
+        <p class="overline">A LITTLE GAME OF STRATEGY</p>
+        <h1>Three in a row.<br><em>Make it count.</em></h1>
+        <p class="hero-description">The familiar game, made for one more round. Play a thoughtful computer, challenge a friend, or try a new twist.</p>
+        <div class="hero-actions"><button class="primary-button" id="guest-start">PLAY AS A GUEST <span aria-hidden="true">↗</span></button><button class="secondary-button" data-auth-link="register">MAKE AN ACCOUNT</button></div>
+        <p class="quiet-note">Guest games are always free. An account saves your record and streak.</p>
+      </div>
+      <div class="hero-art" aria-label="Tic Tac Toe board illustration">
+        <div class="art-caption"><span>THREE MARKS</span><span>ONE MOMENT</span></div>
+        <div class="art-board"><span class="art-x">×</span><span></span><span class="art-o">○</span><span></span><span class="art-x">×</span><span></span><span class="art-o">○</span><span></span><span class="art-x">×</span><i class="art-line"></i></div>
+        <p class="art-foot">X WINS · ROUND 014</p>
+      </div>
+      <div class="landing-foot"><span>THREE WAYS TO PLAY</span><span>CLASSIC · MISÈRE · FOUR IN A ROW</span></div>
+    </section>
+
+    <section class="screen auth-screen hidden" id="auth-screen" data-screen="auth">
+      <div class="auth-aside"><p class="overline">YOUR PLACE AT THE TABLE</p><h1>Keep your<br><em>good run.</em></h1><p>Save your match record, pick up where you left off, and keep your winning streak going.</p><div class="auth-aside-mark">X <span>×</span> O</div></div>
+      <div class="auth-card">
+        <button class="back-link" data-screen-link="home">← BACK</button>
+        <div class="auth-panel" data-auth-panel="login">
+          <p class="section-kicker">WELCOME BACK</p><h2>Sign in</h2><p class="form-intro">Your record is right where you left it.</p>
+          <form id="login-form"><label>Email address<input name="email" type="email" autocomplete="email" required maxlength="254" placeholder="you@example.com"></label><label>Password<input name="password" type="password" autocomplete="current-password" required maxlength="128" placeholder="Your password"></label><button class="primary-button full-button" type="submit">SIGN IN <span>↗</span></button></form>
+          <button class="inline-link forgot-link" data-auth-link="forgot">Forgot password?</button><p class="switch-copy">New here? <button class="inline-link" data-auth-link="register">Create an account</button></p>
+        </div>
+        <div class="auth-panel hidden" data-auth-panel="register">
+          <p class="section-kicker">STEP 1 · VERIFY EMAIL</p><h2>Create account</h2><p class="form-intro">Enter your email and we’ll send you a six-digit verification code.</p>
+          <form id="register-form"><label>Email address<input name="email" type="email" autocomplete="email" required maxlength="254" placeholder="you@example.com"></label><button class="primary-button full-button" type="submit">SEND VERIFICATION CODE <span>↗</span></button></form>
+          <p class="switch-copy">Already have an account? <button class="inline-link" data-auth-link="login">Sign in</button></p>
+        </div>
+        <div class="auth-panel hidden" data-auth-panel="verify">
+          <p class="section-kicker">STEP 2 · EMAIL CODE</p><h2>Enter your code</h2><p class="form-intro">We sent a six-digit code to <strong id="verify-email-label"></strong>. It expires in ten minutes.</p>
+          <form id="verify-form"><input name="email" type="hidden"><label>Verification code<input class="code-input" name="code" type="text" inputmode="numeric" pattern="[0-9]{6}" autocomplete="one-time-code" required maxlength="6" placeholder="000000"></label><button class="primary-button full-button" type="submit">VERIFY EMAIL <span>↗</span></button></form>
+          <button class="inline-link" id="resend-code">Send a new code</button>
+        </div>
+        <div class="auth-panel hidden" data-auth-panel="register-password">
+          <p class="section-kicker">STEP 3 · CREATE PASSWORD</p><h2>Create a password</h2><p class="form-intro">Choose a password for your new account, then enter it again to confirm.</p>
+          <form id="register-password-form"><input name="setupToken" type="hidden"><label>Create password<input name="password" type="password" autocomplete="new-password" required minlength="10" maxlength="128" placeholder="At least 10 characters"></label><label>Re-enter password<input name="confirmPassword" type="password" autocomplete="new-password" required minlength="10" maxlength="128" placeholder="Enter it again"></label><button class="primary-button full-button" type="submit">CREATE ACCOUNT <span>↗</span></button></form>
+        </div>
+        <div class="auth-panel hidden" data-auth-panel="forgot">
+          <p class="section-kicker">STEP 1 · REQUEST A CODE</p><h2>Forgot password?</h2><p class="form-intro">Enter your account email and we’ll send a password reset code.</p>
+          <form id="forgot-form"><label>Email address<input name="email" type="email" autocomplete="email" required maxlength="254" placeholder="you@example.com"></label><button class="primary-button full-button" type="submit">SEND RESET CODE <span>↗</span></button></form>
+          <p class="switch-copy"><button class="inline-link" data-auth-link="login">Back to sign in</button></p>
+        </div>
+        <div class="auth-panel hidden" data-auth-panel="forgot-verify">
+          <p class="section-kicker">STEP 2 · VERIFY CODE</p><h2>Verify your code</h2><p class="form-intro">Enter the six-digit reset code sent to <strong id="reset-email-label"></strong>.</p>
+          <form id="forgot-verify-form"><input name="email" type="hidden"><label>Reset code<input class="code-input" name="code" type="text" inputmode="numeric" pattern="[0-9]{6}" autocomplete="one-time-code" required maxlength="6" placeholder="000000"></label><button class="primary-button full-button" type="submit">VERIFY CODE <span>↗</span></button></form>
+          <button class="inline-link" id="resend-reset-code">Send a new code</button>
+        </div>
+        <div class="auth-panel hidden" data-auth-panel="reset">
+          <p class="section-kicker">STEP 3 · NEW PASSWORD</p><h2>Choose a new password</h2><p class="form-intro">Create your new password, then enter it again to confirm.</p>
+          <form id="reset-form"><input name="resetToken" type="hidden"><label>New password<input name="password" type="password" autocomplete="new-password" required minlength="10" maxlength="128" placeholder="At least 10 characters"></label><label>Re-enter password<input name="confirmPassword" type="password" autocomplete="new-password" required minlength="10" maxlength="128" placeholder="Enter it again"></label><button class="primary-button full-button" type="submit">RESET PASSWORD <span>↗</span></button></form>
+        </div>
+        <p class="form-error" id="form-error" role="status"></p>
+      </div>
+    </section>
+
+    <section class="screen game-screen hidden" id="game-screen" data-screen="game">
+      <div class="game-top"><div><p class="overline">THE BOARD IS YOURS</p><h1>Find your <em>line.</em></h1></div><button class="text-button" data-screen-link="home">← HOME</button></div>
+      <div class="game-layout">
+        <aside class="game-options">
+          <p class="options-title">CHOOSE YOUR GAME</p>
+          <div class="variant-list" role="group" aria-label="Game variation">
+            <button class="variant-card active" data-variant="classic" aria-pressed="true"><span class="variant-num">01</span><span><strong>Classic</strong><small>Three in a row wins.</small></span><span class="variant-arrow">↗</span></button>
+            <button class="variant-card" data-variant="misere" aria-pressed="false"><span class="variant-num">02</span><span><strong>Misère</strong><small>Make three and you lose.</small></span><span class="variant-arrow">↗</span></button>
+            <button class="variant-card" data-variant="four" aria-pressed="false"><span class="variant-num">03</span><span><strong>Four in a Row</strong><small>A bigger board. Four wins.</small></span><span class="variant-arrow">↗</span></button>
+          </div>
+        <div class="play-mode"><span>OPPONENT</span><div><button class="mode-chip active" data-mode="cpu" aria-pressed="true">COMPUTER</button><button class="mode-chip" data-mode="local" aria-pressed="false">FRIEND</button></div></div>
+          <div class="name-fields hidden" id="name-fields"><label><span>PLAYER X</span><input id="player-x-name" maxlength="16" placeholder="Player 1"></label><label><span>PLAYER O</span><input id="player-o-name" maxlength="16" placeholder="Player 2"></label></div>
+          <section class="progress-card hidden" id="progress-card"><div class="progress-heading"><span>YOUR RECORD</span><span class="rank-label" id="rank-label">NEWCOMER</span></div><div class="progress-stats"><div><strong id="account-wins">0</strong><small>WINS</small></div><div><strong id="account-played">0</strong><small>PLAYED</small></div><div><strong id="account-streak">0</strong><small>STREAK</small></div></div><div class="history" id="history-list"></div></section>
+          <section class="progress-card guest-progress" id="guest-progress"><div class="progress-heading"><span>THIS VISIT</span><span class="rank-label">GUEST</span></div><div class="progress-stats"><div><strong id="guest-wins">0</strong><small>WINS</small></div><div><strong id="guest-played">0</strong><small>PLAYED</small></div><div><strong id="guest-streak">0</strong><small>STREAK</small></div></div><p>Sign in to save your record.</p><button class="inline-link" data-auth-link="register">Create an account →</button></section>
+        </aside>
+        <section class="board-section" aria-label="Game board">
+          <div class="game-heading"><span id="round-label">ROUND 01</span><span id="mode-caption">SOLO · CLASSIC</span></div>
+          <div class="versus-row"><div class="player-card active-x" id="player-x-card"><span class="player-symbol x-symbol">X</span><span class="player-info"><small>PLAYER X</small><strong id="player-x-label">YOU</strong></span><span class="player-score" id="match-score-x">0</span></div><span class="versus-mark">VS</span><div class="player-card" id="player-o-card"><span class="player-symbol o-symbol">O</span><span class="player-info"><small>PLAYER O</small><strong id="player-o-label">COMPUTER</strong></span><span class="player-score" id="match-score-o">0</span></div></div>
+          <div class="status" aria-live="polite"><span class="status-mark" id="status-symbol">X</span><span><strong id="status-kicker">YOUR TURN</strong><small id="status-message">Make it count.</small></span><span class="turn-dots" aria-hidden="true"><i id="pip-x" class="active"></i><i id="pip-o"></i></span></div>
+          <div class="board-wrap"><div class="board" id="board" role="grid" aria-label="Tic Tac Toe board"></div><div class="winning-sweep" id="winning-sweep" aria-hidden="true"></div></div>
+          <div class="game-actions"><button class="reset-button" id="new-game"><span aria-hidden="true">↻</span> NEW GAME</button><span class="keyboard-hint">USE <kbd>1</kbd>—<kbd>9</kbd></span></div>
+        </section>
+      </div>
+    </section>
+
+    <footer class="footer"><span>THREE MARKS. ONE MOMENT.</span><span>THREE IN A ROW · NO. 01</span></footer>
+  </main>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="/app.js"></script>
+</body>
+</html>
