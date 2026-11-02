@@ -3,8 +3,7 @@
 .env.*
 !.env.example
 
-# Local database and Python cache
-tictactoe.sqlite3
-tictactoe.sqlite3-*
+# Python and Vercel local files
 __pycache__/
 *.py[cod]
+.vercel/
