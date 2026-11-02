@@ -74,3 +74,27 @@ body{background:#07110b}
   .game-layout{grid-template-columns:.85fr 1.15fr;gap:30px}
   .board-section{max-width:520px}
 }
+
+/* Keep the landing-page caption in the layout so it never sits below the viewport. */
+.landing{grid-template-rows:minmax(0,1fr) auto;row-gap:12px;padding:clamp(30px,5vh,48px) 0 0}
+.landing-foot{position:relative;inset:auto;grid-column:1/-1;width:100%;min-height:58px;margin-top:8px;padding:10px 0;color:#c1cbb4;flex-wrap:wrap;row-gap:8px;line-height:1.5}
+.wordmark{cursor:pointer}
+.game-top-actions{display:flex;align-items:center;gap:18px}
+.game-top-actions .secondary-button{min-height:38px}
+.help-dialog{width:min(520px,calc(100% - 32px));max-height:min(80vh,680px);padding:26px;color:var(--paper);background:#111711;border:1px solid #536849;border-radius:8px;box-shadow:0 24px 80px #000b}
+.help-dialog::backdrop{background:#020603b8;backdrop-filter:blur(5px)}
+.help-dialog-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}
+.help-dialog-head .section-kicker{font-size:9px}
+.help-dialog h2{margin:0;font-size:28px;font-weight:500;letter-spacing:-.8px}
+.help-close{width:34px;height:34px;color:var(--paper);background:#ffffff0a;border:1px solid #ffffff20;border-radius:50%;font-size:24px;line-height:1;cursor:pointer}
+.help-close:hover{color:var(--green);border-color:var(--green)}
+.help-intro{margin:14px 0 20px;color:var(--soft);font-size:13px;line-height:1.7}
+.help-rule{padding:14px 0;display:grid;grid-template-columns:125px 1fr;gap:16px;border-top:1px solid #ffffff1b;font-size:12px;line-height:1.6}
+.help-rule strong{color:var(--green);font-weight:600}
+.help-rule span{color:#c6c9bf}
+.help-dialog-foot{margin-top:10px;padding-top:14px;display:flex;justify-content:space-between;gap:12px;border-top:1px solid #ffffff1b;color:#92998a;font:8px "SFMono-Regular",Consolas,monospace;letter-spacing:.7px}
+.recovery-note{margin:13px 0 0;line-height:1.5}
+.cell:active:not(:disabled){transform:scale(.96)}
+@media(min-width:1180px){.hero-art{width:min(100%,440px)}.landing-foot{margin-top:0}}
+@media(max-width:800px){.landing{grid-template-rows:auto auto auto;row-gap:28px;padding-bottom:0;padding-top:50px}.landing-foot{bottom:auto;margin-top:0}}
+@media(max-width:500px){.game-top{align-items:flex-start;gap:12px}.game-top-actions{align-items:flex-end;flex-direction:column;gap:8px}.game-top-actions .secondary-button{min-height:34px;padding:0 9px;font-size:8px}.landing-foot{font-size:7px}.help-dialog{padding:21px}.help-rule{grid-template-columns:1fr;gap:3px}.help-dialog-foot{flex-direction:column}}

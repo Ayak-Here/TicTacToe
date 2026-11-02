@@ -13,7 +13,7 @@
     <header class="masthead">
       <a class="wordmark" href="#home" aria-label="Three in a Row home">THREE IN A ROW<span>®</span></a>
       <nav class="main-nav" id="main-nav">
-        <button class="text-button" data-screen-link="game">HOW TO PLAY</button>
+        <button class="text-button" data-help-open>HOW TO PLAY</button>
         <button class="text-button" data-auth-link="login">SIGN IN</button>
         <button class="small-cta" data-auth-link="register">CREATE ACCOUNT</button>
       </nav>
@@ -56,7 +56,7 @@
     </section>
 
     <section class="screen game-screen hidden" id="game-screen" data-screen="game">
-      <div class="game-top"><div><p class="overline">THE BOARD IS YOURS</p><h1>Find your <em>line.</em></h1></div><button class="text-button" data-screen-link="home">← HOME</button></div>
+      <div class="game-top"><div><p class="overline">THE BOARD IS YOURS</p><h1>Find your <em>line.</em></h1></div><div class="game-top-actions"><button class="text-button" data-help-open>HOW TO PLAY</button><button class="secondary-button" data-screen-link="home">← LANDING PAGE</button></div></div>
       <div class="game-layout">
         <aside class="game-options">
           <p class="options-title">CHOOSE YOUR GAME</p>
@@ -82,6 +82,14 @@
 
     <footer class="footer"><span>THREE MARKS. ONE MOMENT.</span><span>THREE IN A ROW · NO. 01</span></footer>
   </main>
+  <dialog class="help-dialog" id="how-to-play-dialog" aria-labelledby="help-title">
+    <div class="help-dialog-head"><div><p class="section-kicker">A QUICK GUIDE</p><h2 id="help-title">How to play</h2></div><button class="help-close" type="button" aria-label="Close instructions" data-help-close>×</button></div>
+    <p class="help-intro">Choose a variation, pick an opponent, then select an open square. Your game is saved automatically when you’re signed in.</p>
+    <div class="help-rule"><strong>Classic</strong><span>Make a line of three horizontally, vertically, or diagonally to win.</span></div>
+    <div class="help-rule"><strong>Misère</strong><span>A twist on classic: completing a line of three makes you lose.</span></div>
+    <div class="help-rule"><strong>Four in a Row</strong><span>Play on the larger board and connect four marks to win.</span></div>
+    <div class="help-dialog-foot"><span>COMPUTER · SOLO PLAY</span><span>FRIEND · TAKE TURNS</span></div>
+  </dialog>
   <div class="toast" id="toast" role="status"></div>
   <script src="/app.js"></script>
 </body>

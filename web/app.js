@@ -157,6 +157,11 @@ function renderStatus() {
 
   symbol.textContent = game.turn;
   symbol.className = `status-mark ${game.turn.toLowerCase()}`;
+  if (state.busy && game.mode === 'local') {
+    kicker.textContent = 'UPDATING BOARD';
+    message.textContent = 'Your move is appearing…';
+    return;
+  }
   const yourTurn = game.mode === 'local' || game.turn === 'X';
   kicker.textContent = game.mode === 'local' ? `${game.turn} TO PLAY` : yourTurn ? 'YOUR TURN' : 'COMPUTER THINKING';
   message.textContent = game.mode === 'local' ? 'Make your move.' : yourTurn ? 'Make it count.' : 'Choosing a move…';
@@ -212,16 +217,24 @@ async function newGame() {
 
 async function play(cell) {
   if (state.busy || !state.game || state.game.status !== 'playing') return;
+  const beforeMove = state.game;
+  const optimisticGame = { ...beforeMove, board: [...beforeMove.board], winningLine: [...beforeMove.winningLine] };
+  optimisticGame.board[cell] = optimisticGame.turn;
+  optimisticGame.turn = beforeMove.mode === 'cpu'
+    ? beforeMove.aiMark
+    : beforeMove.turn === 'X' ? 'O' : 'X';
+  state.game = optimisticGame;
   state.busy = true;
   renderGame();
   try {
-    state.game = await api(`/api/games/${state.game.id}/move`, {
+    state.game = await api(`/api/games/${beforeMove.id}/move`, {
       method: 'POST', body: JSON.stringify({ cell }),
     });
     state.busy = false;
     renderGame();
     if (state.game.status === 'finished') await recordResult();
   } catch (error) {
+    state.game = beforeMove;
     state.busy = false;
     renderGame();
     showError(error.message);
@@ -281,6 +294,18 @@ setupForm('#login-form', async data => {
 });
 
 document.querySelectorAll('[data-auth-link]').forEach(button => button.addEventListener('click', () => showScreen('auth', button.dataset.authLink)));
+document.querySelector('.wordmark').addEventListener('click', event => {
+  event.preventDefault();
+  showScreen('home');
+});
+const helpDialog = document.querySelector('#how-to-play-dialog');
+document.querySelectorAll('[data-help-open]').forEach(button => button.addEventListener('click', () => {
+  if (!helpDialog.open) helpDialog.showModal();
+}));
+document.querySelector('[data-help-close]').addEventListener('click', () => helpDialog.close());
+helpDialog.addEventListener('click', event => {
+  if (event.target === helpDialog) helpDialog.close();
+});
 document.querySelectorAll('[data-screen-link]').forEach(button => button.addEventListener('click', () => {
   if (button.dataset.screenLink === 'game' && !state.game) startGame();
   else showScreen(button.dataset.screenLink);
