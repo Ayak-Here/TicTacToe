@@ -76,8 +76,9 @@ body{background:#07110b}
 }
 
 /* Keep the landing-page caption in the layout so it never sits below the viewport. */
-.landing{grid-template-rows:minmax(0,1fr) auto;row-gap:12px;padding:clamp(30px,5vh,48px) 0 0}
-.landing-foot{position:relative;inset:auto;grid-column:1/-1;width:100%;min-height:58px;margin-top:8px;padding:10px 0;color:#c1cbb4;flex-wrap:wrap;row-gap:8px;line-height:1.5}
+.landing{grid-template-rows:minmax(0,1fr) auto;row-gap:12px;padding-top:clamp(30px,5vh,48px);padding-bottom:0}
+.landing-foot{position:relative;inset:auto;grid-column:1/-1;width:100%;min-height:58px;margin-top:8px;padding:10px clamp(16px,2vw,28px);color:#c1cbb4;flex-wrap:wrap;row-gap:8px;line-height:1.5}
+.footer{padding-inline:clamp(12px,2vw,24px)}
 .wordmark{cursor:pointer}
 .game-top-actions{display:flex;align-items:center;gap:18px}
 .game-top-actions .secondary-button{min-height:38px}
@@ -98,3 +99,10 @@ body{background:#07110b}
 @media(min-width:1180px){.hero-art{width:min(100%,440px)}.landing-foot{margin-top:0}}
 @media(max-width:800px){.landing{grid-template-rows:auto auto auto;row-gap:28px;padding-bottom:0;padding-top:50px}.landing-foot{bottom:auto;margin-top:0}}
 @media(max-width:500px){.game-top{align-items:flex-start;gap:12px}.game-top-actions{align-items:flex-end;flex-direction:column;gap:8px}.game-top-actions .secondary-button{min-height:34px;padding:0 9px;font-size:8px}.landing-foot{font-size:7px}.help-dialog{padding:21px}.help-rule{grid-template-columns:1fr;gap:3px}.help-dialog-foot{flex-direction:column}}
+
+/* Draw the win line between the measured centers of the winning cells. */
+.winning-sweep{inset:auto;top:7px;left:7px;display:block;width:calc(100% - 14px);height:calc(100% - 14px);overflow:visible}
+#winning-sweep::after{display:none;content:none}
+.winning-sweep line{fill:none;stroke:#a7ff64;stroke-width:3px;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;filter:drop-shadow(0 0 5px #a7ff64b8);transition:stroke-dashoffset .42s cubic-bezier(.2,.75,.3,1);vector-effect:non-scaling-stroke}
+.winning-sweep line.o-line{stroke:#ffb02d;filter:drop-shadow(0 0 5px #ffb02db8)}
+.winning-sweep line.is-drawn{stroke-dashoffset:0}

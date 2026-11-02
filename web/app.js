@@ -93,15 +93,6 @@ function renderProgress() {
   }
 }
 
-function lineType(line, size) {
-  if (!line.length) return '';
-  const firstRow = Math.floor(line[0] / size);
-  const firstCol = line[0] % size;
-  if (line.every(index => Math.floor(index / size) === firstRow)) return `row-${firstRow}`;
-  if (line.every(index => index % size === firstCol)) return `col-${firstCol}`;
-  return line[0] === 0 ? 'diag-down' : 'diag-up';
-}
-
 function renderBoard() {
   const game = state.game;
   boardElement.replaceChildren();
@@ -129,13 +120,34 @@ function renderBoard() {
   });
 }
 
+function renderWinningSweep() {
+  const game = state.game;
+  const svg = document.querySelector('#winning-sweep');
+  svg.replaceChildren();
+  if (game.status !== 'finished' || game.winner === 'draw' || !game.winningLine.length) return;
+
+  const overlay = svg.getBoundingClientRect();
+  const cells = boardElement.children;
+  const first = cells[game.winningLine[0]].getBoundingClientRect();
+  const last = cells[game.winningLine.at(-1)].getBoundingClientRect();
+  const lineMark = game.variant === 'misere' ? game.board[game.winningLine[0]] : game.winner;
+  const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+  line.setAttribute('x1', String(first.left + first.width / 2 - overlay.left));
+  line.setAttribute('y1', String(first.top + first.height / 2 - overlay.top));
+  line.setAttribute('x2', String(last.left + last.width / 2 - overlay.left));
+  line.setAttribute('y2', String(last.top + last.height / 2 - overlay.top));
+  line.setAttribute('pathLength', '1');
+  line.classList.add(lineMark === 'O' ? 'o-line' : 'x-line');
+  svg.setAttribute('viewBox', `0 0 ${overlay.width} ${overlay.height}`);
+  svg.append(line);
+  requestAnimationFrame(() => line.classList.add('is-drawn'));
+}
+
 function renderStatus() {
   const game = state.game;
   const symbol = document.querySelector('#status-symbol');
   const kicker = document.querySelector('#status-kicker');
   const message = document.querySelector('#status-message');
-  const sweep = document.querySelector('#winning-sweep');
-  sweep.className = 'winning-sweep';
   document.querySelector('#pip-x').classList.toggle('active', game.status === 'playing' && game.turn === 'X');
   document.querySelector('#pip-o').classList.toggle('active', game.status === 'playing' && game.turn === 'O');
 
@@ -148,9 +160,6 @@ function renderStatus() {
       const youWon = game.mode === 'cpu' && game.winner === 'X';
       kicker.textContent = youWon ? 'YOU WIN' : game.mode === 'cpu' ? 'COMPUTER WINS' : `${game.winner} WINS`;
       message.textContent = youWon ? 'Nicely played.' : game.mode === 'cpu' ? 'Close one. Try again?' : 'Nicely played.';
-      const lineMark = game.variant === 'misere' ? game.board[game.winningLine[0]] : game.winner;
-      sweep.className = `winning-sweep ${lineType(game.winningLine, game.size)} ${lineMark.toLowerCase()}`;
-      if (game.size === 4) sweep.classList.add('four');
     }
     return;
   }
@@ -171,6 +180,7 @@ function renderGame() {
   if (!state.game) return;
   renderBoard();
   renderStatus();
+  renderWinningSweep();
   document.querySelector('#round-label').textContent = `ROUND ${String(state.round).padStart(2, '0')}`;
   const variantTitle = state.variant === 'four' ? 'FOUR IN A ROW' : state.variant === 'misere' ? 'MISÈRE' : 'CLASSIC';
   document.querySelector('#mode-caption').textContent = `${state.mode === 'cpu' ? 'SOLO' : 'FRIEND'} · ${variantTitle}`;
